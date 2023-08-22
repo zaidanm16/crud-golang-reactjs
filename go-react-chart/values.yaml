@@ -1,0 +1,54 @@
+# APP CONFIG
+appConfig:
+  dbHost: postgres-service
+
+# BACKEND APP
+backendApp:
+  backendApp:
+    image:
+      repository: kevinmz/app-backend
+      tag: v0.3
+  replicas: 2
+backendAppService:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP
+
+# FRONTEND APP
+frontendApp:
+  frontendApp:
+    image:
+      repository: kevinmz/app-frontend
+      tag: v0.3
+  replicas: 2
+frontendAppService:
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP
+
+kubernetesClusterDomain: cluster.local
+
+# DATABASE
+postgres:
+  postgres:
+    image:
+      repository: kevinmz/app-db
+      tag: v0.1
+  replicas: 2
+postgresSecret:
+  postgresDb: "go_crud"
+  postgresPassword: "s1mplerestap1"
+  postgresUser: "postgres"
+postgresService:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  type: ClusterIP
+
+# PERSISTENT VOLUME CLAIM
+pvc:
+  postgresPvc:
+    storageClass: local-path
+    storageRequest: 2Gi

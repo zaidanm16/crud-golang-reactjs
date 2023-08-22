@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "go-react.fullname" . }}-frontend-app
+  labels:
+  {{- include "go-react.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.frontendApp.replicas }}
+  selector:
+    matchLabels:
+      app: frontend-app
+    {{- include "go-react.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+      {{- include "go-react.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.frontendApp.frontendApp.image.repository }}:{{ .Values.frontendApp.frontendApp.image.tag
+          | default .Chart.AppVersion }}
+        name: frontend-app
+        ports:
+        - containerPort: 80
+        resources: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "go-react.fullname" . }}-backend-app
+  labels:
+  {{- include "go-react.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.backendApp.replicas }}
+  selector:
+    matchLabels:
+      app: backend-app
+    {{- include "go-react.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: backend-app
+      {{- include "go-react.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: DB_HOST
+              name: {{ include "go-react.fullname" . }}-app-config
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_DB
+              name: {{ include "go-react.fullname" . }}-postgres-secret
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_USER
+              name: {{ include "go-react.fullname" . }}-postgres-secret
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_PASSWORD
+              name: {{ include "go-react.fullname" . }}-postgres-secret
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.backendApp.backendApp.image.repository }}:{{ .Values.backendApp.backendApp.image.tag
+          | default .Chart.AppVersion }}
+        name: backend-app
+        ports:
+        - containerPort: 8080
+        resources: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "go-react.fullname" . }}-postgres
+  labels:
+  {{- include "go-react.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.postgres.replicas }}
+  selector:
+    matchLabels:
+      app: postgres
+    {{- include "go-react.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: postgres
+      {{- include "go-react.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_DB
+              name: {{ include "go-react.fullname" . }}-postgres-secret
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_USER
+              name: {{ include "go-react.fullname" . }}-postgres-secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: POSTGRES_PASSWORD
+              name: {{ include "go-react.fullname" . }}-postgres-secret
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.postgres.postgres.image.repository }}:{{ .Values.postgres.postgres.image.tag
+          | default .Chart.AppVersion }}
+        name: postgres
+        ports:
+        - containerPort: 5432
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-volume
+      volumes:
+      - name: postgres-volume
+        persistentVolumeClaim:
+          claimName: {{ include "go-react.fullname" . }}-postgres-pvc

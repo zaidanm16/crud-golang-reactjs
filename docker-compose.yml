@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./client
+    image: app-frontend:v0.3
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    container_name: frontend
+
+  backend:
+    build:
+      context: ./server
+    image: app-backend:v0.3
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    container_name: backend
+
+  db:
+    build:
+      context: ./db
+    image: app-db:v0.1
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=s1mplerestap1
+      - POSTGRES_DB=go_crud
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    container_name: db
+  

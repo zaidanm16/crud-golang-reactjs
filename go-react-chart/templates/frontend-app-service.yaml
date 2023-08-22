@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "go-react.fullname" . }}-frontend-app-service
+  labels:
+  {{- include "go-react.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.frontendAppService.type }}
+  selector:
+    app: frontend-app
+  {{- include "go-react.selectorLabels" . | nindent 4 }}
+  ports:
+	{{- .Values.frontendAppService.ports | toYaml | nindent 2 -}}
