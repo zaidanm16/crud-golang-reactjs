@@ -6,7 +6,7 @@ metadata:
   {{- include "go-react.labels" . | nindent 4 }}
 spec:
   rules:
-  - host: go-react-app.lab
+  - host: {{ .Values.ingress.url }}
     http:
       paths:
       - backend:

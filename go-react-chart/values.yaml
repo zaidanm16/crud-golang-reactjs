@@ -43,8 +43,18 @@ postgresService:
     targetPort: 5432
   type: ClusterIP
 
+# PERSISTENT VOLUME
+pv:
+  size: 5Gi
+  hostpath:
+    path: /tmp/lib/postgresql/data
+
 # PERSISTENT VOLUME CLAIM
 pvc:
   postgresPvc:
     storageClass: local-path
     storageRequest: 2Gi
+
+# INGRESS
+ingress:
+  url: go-react-app.lab

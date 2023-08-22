@@ -9,7 +9,7 @@ spec:
   - ReadWriteOnce
   - ReadWriteMany
   capacity:
-    storage: 5Gi
+    storage: {{ .Values.pv.size }}
   hostPath:
-    path: /tmp/lib/postgresql/data
+    path: {{ .Values.pv.hostpath.path }}
   storageClassName: local-path
