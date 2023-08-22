@@ -21,7 +21,8 @@ spec:
     spec:
       containers:
       - name: frontend-app
-        image: kevinmz/app-frontend:v0.3
+        image: kevinmz/app-frontend:v0.6
+        imagePullPolicy: Always
         # resources:
         #   limits:
         #     memory: "1Gi"
@@ -46,6 +47,7 @@ spec:
       containers:
       - name: backend-app
         image: kevinmz/app-backend:v0.3
+        imagePullPolicy: Always
         # resources:
         #   limits:
         #     memory: "1Gi"

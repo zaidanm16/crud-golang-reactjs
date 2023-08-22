@@ -11,5 +11,5 @@ spec:
   capacity:
     storage: 5Gi
   hostPath:
-    path: /tmp/postgres/data
+    path: /tmp/lib/postgresql/data
   storageClassName: local-path

@@ -22,6 +22,7 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.frontendApp.frontendApp.image.repository }}:{{ .Values.frontendApp.frontendApp.image.tag
           | default .Chart.AppVersion }}
+        imagePullPolicy: Always
         name: frontend-app
         ports:
         - containerPort: 80
@@ -71,6 +72,7 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.backendApp.backendApp.image.repository }}:{{ .Values.backendApp.backendApp.image.tag
           | default .Chart.AppVersion }}
+        imagePullPolicy: Always
         name: backend-app
         ports:
         - containerPort: 8080
@@ -115,6 +117,7 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.postgres.postgres.image.repository }}:{{ .Values.postgres.postgres.image.tag
           | default .Chart.AppVersion }}
+        imagePullPolicy: Always
         name: postgres
         ports:
         - containerPort: 5432
