@@ -71,8 +71,14 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 COPY public.users (id, name, email, date, city, country) FROM stdin;
 1	Udin	udin@udin.com	2000-09-09 00:00:00+00	Tjimahi	Indonesia
 2	Kepin	kevin@udin.com	2000-08-16 00:00:00+00	Depock	Indonesia
-3	Tes	delete@udin.com	2000-09-09 00:00:00+00	Bandoeng	Indonesia
+3	Tes delete@udin.com	2000-09-09 00:00:00+00	Bandoeng	Indonesia
 4	Mellisa	mele@udin.com	2000-12-04 00:00:00+00	Kerkof	Suriname
+5   Arizal  arizal@udin.com 2000-09-09 00:00:00+00  Padalarang  Indonesia
+6   Yanuar  yanu@udin.com   2000-09-09 00:00:00+00  Cikalong    Indonesia
+7   Hanif   hanip@udin.com  2000-09-09 00:00:00+00  Ngamprah    Indonesia
+8   Dedi   dedi@udin.com    2000-09-09 00:00:00+00  Bogor      Indonesia
+9   Bambang   bambang@udin.com   2000-09-09 00:00:00+00  Bandung    Indonesia
+10  Dimas   dimas@udin.com   2000-09-09 00:00:00+00  Bandung    Indonesia
 \.
 
 
